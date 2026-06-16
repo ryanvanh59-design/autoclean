@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="100" rx="20" fill="#0b2747"/>
+    <path d="M50 28 C 62 44, 70 54, 70 64 a 20 20 0 1 1 -40 0 C 30 54, 38 44, 50 28 Z" fill="#f7a01e"/>
+    <circle cx="43" cy="62" r="5" fill="#fff" opacity="0.85"/>
+  </svg>
+</template>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <style>
+    /* ---- Resets ---- */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; }
+    input, select, textarea, button { font-family: inherit; }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.45); }
+    /* hide native date/time icon recolor */
+    input[type="date"]::-webkit-calendar-picker-indicator,
+    input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: .7; cursor: pointer; }
+
+    /* ---- Animations : bulles, eau, flottement ---- */
+    @keyframes rise {
+      0%   { transform: translateY(0) translateX(0) scale(.9); }
+      50%  { transform: translateY(-55vh) translateX(22px) scale(1); }
+      100% { transform: translateY(-115vh) translateX(-12px) scale(1.05); opacity: 0; }
+    }
+    @keyframes floaty {
+      0%,100% { transform: translateY(0); }
+      50%     { transform: translateY(-14px); }
+    }
+    @keyframes drip {
+      0%   { transform: translateY(-6px); opacity: 0; }
+      30%  { opacity: 1; }
+      100% { transform: translateY(60px); opacity: 0; }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    @keyframes pulseGlow {
+      0%,100% { box-shadow: 0 0 0 0 rgba(247,160,30,.45); }
+      50%     { box-shadow: 0 0 0 16px rgba(247,160,30,0); }
+    }
+  </style>
+</helmet>
+
+<!-- ============ RACINE ============ -->
+<div style="position:relative; min-height:100vh; overflow-x:hidden; background:radial-gradient(120% 80% at 50% -10%, #15406e 0%, #0b2747 38%, #061528 100%); color:#fff; font-family:'Montserrat',system-ui,sans-serif; -webkit-font-smoothing:antialiased;">
+
+  <!-- couche de bulles flottantes (décoratif, derrière le contenu) -->
+  <div style="position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;">{{ bubbles }}</div>
+
+  <!-- ============ EN-TÊTE STICKY ============ -->
+  <header style="position:sticky; top:0; z-index:50; backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); background:linear-gradient(180deg, rgba(6,21,40,.92), rgba(6,21,40,.62)); border-bottom:1px solid rgba(255,255,255,.08);">
+    <div style="max-width:1180px; margin:0 auto; padding:14px clamp(16px,4vw,32px); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+      <!-- Logo -->
+      <a href="#accueil" style="display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff;">
+        <span style="position:relative; width:34px; height:34px; flex:none; background:linear-gradient(160deg,#ffc24d,#f7941d); border-radius:50% 50% 50% 0; transform:rotate(45deg); box-shadow:0 6px 16px rgba(247,148,29,.4);">
+          <span style="position:absolute; inset:9px 9px 7px 11px; background:rgba(255,255,255,.85); border-radius:50%;"></span>
+        </span>
+        <span style="display:flex; flex-direction:column; line-height:1;">
+          <span style="font-weight:900; font-size:20px; letter-spacing:1px; font-style:italic;">AUTO<span style="color:#f7a01e;">CLEAN</span></span>
+          <span style="font-size:9px; font-weight:700; letter-spacing:2px; color:#ffb43d; margin-top:3px;">MAISON &amp; AUTO IMPECCABLES</span>
+        </span>
+      </a>
+      <!-- Navigation + CTA -->
+      <nav style="display:flex; align-items:center; gap:clamp(10px,2.4vw,28px); flex-wrap:wrap;">
+        <a href="#accueil"     style="color:rgba(255,255,255,.82); text-decoration:none; font-weight:600; font-size:14px;">Accueil</a>
+        <a href="#formules"    style="color:rgba(255,255,255,.82); text-decoration:none; font-weight:600; font-size:14px;">Formules</a>
+        <a href="#vehicules"   style="color:rgba(255,255,255,.82); text-decoration:none; font-weight:600; font-size:14px;">Véhicules</a>
+        <a href="#contact"     style="color:rgba(255,255,255,.82); text-decoration:none; font-weight:600; font-size:14px;">Contact</a>
+        <a href="#reservation" style="display:inline-flex; align-items:center; gap:8px; background:linear-gradient(160deg,#ffc24d,#f7941d); color:#08233f; text-decoration:none; font-weight:800; font-size:14px; padding:11px 20px; border-radius:999px; box-shadow:0 8px 20px rgba(247,148,29,.35); animation:pulseGlow 3s ease-in-out infinite;">Réserver</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============ BANNIÈRE PLEIN ÉCRAN ============ -->
+  <section id="accueil" style="position:relative; z-index:1; min-height:92vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:clamp(40px,8vh,90px) clamp(18px,5vw,40px) 70px;">
+    <!-- vague d'eau en bas -->
+    <div style="position:absolute; left:0; right:0; bottom:-1px; height:120px; background:linear-gradient(180deg, transparent, rgba(8,35,63,.55)); pointer-events:none;"></div>
+
+    <div style="position:relative; max-width:880px;">
+      <span style="display:inline-block; padding:8px 18px; border-radius:999px; background:rgba(247,160,30,.14); border:1px solid rgba(247,160,30,.4); color:#ffc24d; font-weight:700; font-size:13px; letter-spacing:2px;">NETTOYAGE PRO • NORD&nbsp;59</span>
+
+      <h1 style="margin:22px 0 0; font-weight:900; font-style:italic; line-height:1.02; letter-spacing:-1px; font-size:clamp(40px,8vw,86px); text-shadow:0 10px 40px rgba(0,0,0,.4);">
+        Maison &amp; Auto<br><span style="background:linear-gradient(120deg,#ffd877,#f7941d); -webkit-background-clip:text; background-clip:text; color:transparent;">Impeccables</span>
+      </h1>
+
+      <p style="max-width:560px; margin:22px auto 0; font-size:clamp(16px,2.2vw,19px); line-height:1.6; color:rgba(255,255,255,.78); font-weight:500;">
+        Intérieur, extérieur, canapés, matelas et tapis. On redonne de l'éclat à tout ce qui en a besoin — sur tous types de véhicules.
+      </p>
+
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:34px;">
+        <a href="#reservation" style="display:inline-flex; align-items:center; gap:10px; background:linear-gradient(160deg,#ffc24d,#f7941d); color:#08233f; text-decoration:none; font-weight:800; font-size:16px; padding:16px 30px; border-radius:999px; box-shadow:0 14px 34px rgba(247,148,29,.4);">Réserver un créneau →</a>
+        <a href="#formules" style="display:inline-flex; align-items:center; gap:10px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.22); color:#fff; text-decoration:none; font-weight:700; font-size:16px; padding:16px 30px; border-radius:999px;">Voir les formules</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NOS FORMULES ============ -->
+  <section id="formules" style="position:relative; z-index:1; padding:clamp(50px,8vh,90px) clamp(18px,5vw,40px);">
+    <div style="max-width:1100px; margin:0 auto;">
+      <div style="text-align:center; margin-bottom:18px;">
+        <span style="display:block; color:#ffc24d; font-weight:700; letter-spacing:4px; font-size:13px;">NOS FORMULES</span>
+        <h2 style="margin:8px 0 0; font-weight:900; font-style:italic; font-size:clamp(34px,6vw,60px); letter-spacing:1px;">FORMULES</h2>
+        <p style="margin:14px auto 0; max-width:520px; color:rgba(255,255,255,.7); font-weight:500;">Choisissez le niveau de propreté qu'il vous faut. Trois formules, claires et efficaces.</p>
+      </div>
+
+      <!-- Grille de 3 cartes en goutte d'eau -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:clamp(22px,3vw,36px); margin-top:48px; align-items:start;">
+
+        <!-- Carte 1 -->
+        <div style="position:relative; padding-top:46px; animation:floaty 6s ease-in-out infinite;">
+          <div style="position:absolute; top:0; left:50%; transform:translateX(-50%) rotate(45deg); width:84px; height:84px; background:#fff; border-radius:50% 50% 50% 0; box-shadow:0 12px 28px rgba(0,0,0,.35); z-index:2;">
+            <span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; transform:rotate(-45deg); font-weight:900; font-size:38px; color:#0b2747; font-style:italic;">1</span>
+          </div>
+          <div style="background:linear-gradient(165deg,#ffb43d,#f6920f); border-radius:34px; padding:60px 26px 32px; box-shadow:0 18px 40px rgba(0,0,0,.3); color:#0a233f;">
+            <div style="font-weight:800; font-size:15px; letter-spacing:1px;">ASPIRATEUR</div>
+            <div style="font-weight:900; font-size:20px; margin-top:4px;">PLASTIQUES &amp; VITRES</div>
+            <div style="margin-top:22px; padding-top:20px; border-top:2px solid rgba(10,35,63,.18); font-weight:700; font-size:14px; color:rgba(10,35,63,.7);">L'essentiel pour un habitacle net.</div>
+          </div>
+        </div>
+
+        <!-- Carte 2 -->
+        <div style="position:relative; padding-top:46px; animation:floaty 6s ease-in-out .6s infinite;">
+          <div style="position:absolute; top:0; left:50%; transform:translateX(-50%) rotate(45deg); width:84px; height:84px; background:#fff; border-radius:50% 50% 50% 0; box-shadow:0 12px 28px rgba(0,0,0,.35); z-index:2;">
+            <span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; transform:rotate(-45deg); font-weight:900; font-size:38px; color:#0b2747; font-style:italic;">2</span>
+          </div>
+          <div style="background:linear-gradient(165deg,#ffb43d,#f6920f); border-radius:34px; padding:60px 26px 32px; box-shadow:0 18px 40px rgba(0,0,0,.3); color:#0a233f;">
+            <div style="font-weight:800; font-size:15px; letter-spacing:1px;">ASPIRATEUR</div>
+            <div style="font-weight:900; font-size:20px; margin-top:4px;">PLASTIQUES &amp; VITRES</div>
+            <div style="text-align:center; font-weight:900; font-size:22px; margin:14px 0;">+</div>
+            <div style="font-weight:900; font-size:20px;">SHAMPOUINEUSE</div>
+            <div style="margin-top:22px; padding-top:20px; border-top:2px solid rgba(10,35,63,.18); font-weight:700; font-size:14px; color:rgba(10,35,63,.7);">Sièges &amp; moquettes remis à neuf.</div>
+          </div>
+        </div>
+
+        <!-- Carte 3 -->
+        <div style="position:relative; padding-top:46px; animation:floaty 6s ease-in-out 1.2s infinite;">
+          <div style="position:absolute; top:0; left:50%; transform:translateX(-50%) rotate(45deg); width:84px; height:84px; background:#fff; border-radius:50% 50% 50% 0; box-shadow:0 12px 28px rgba(0,0,0,.35); z-index:2;">
+            <span style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; transform:rotate(-45deg); font-weight:900; font-size:38px; color:#0b2747; font-style:italic;">3</span>
+          </div>
+          <div style="position:relative; background:linear-gradient(165deg,#ffc24d,#f6920f); border-radius:34px; padding:60px 26px 32px; box-shadow:0 22px 50px rgba(247,148,29,.35); color:#0a233f; outline:3px solid rgba(255,255,255,.25); outline-offset:-3px;">
+            <span style="position:absolute; top:-12px; right:18px; background:#08233f; color:#ffc24d; font-weight:800; font-size:11px; letter-spacing:1px; padding:6px 12px; border-radius:999px;">COMPLET</span>
+            <div style="font-weight:800; font-size:15px; letter-spacing:1px;">ASPIRATEUR</div>
+            <div style="font-weight:900; font-size:20px; margin-top:4px;">PLASTIQUES &amp; VITRES</div>
+            <div style="text-align:center; font-weight:900; font-size:22px; margin:12px 0;">+</div>
+            <div style="font-weight:900; font-size:20px;">SHAMPOUINEUSE</div>
+            <div style="text-align:center; font-weight:900; font-size:22px; margin:12px 0;">+</div>
+            <div style="font-weight:900; font-size:20px;">EXTÉRIEUR COMPLET</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BANNIÈRE : Canapés, matelas, tapis ============ -->
+  <section style="position:relative; z-index:1; padding:clamp(10px,4vw,30px) clamp(18px,5vw,40px);">
+    <div style="max-width:1100px; margin:0 auto; background:linear-gradient(110deg,#0e2d52,#0a2138); border:1px solid rgba(255,255,255,.08); border-radius:30px; padding:clamp(26px,5vw,46px); text-align:center; box-shadow:0 18px 40px rgba(0,0,0,.25);">
+      <span style="font-size:clamp(22px,4vw,34px); font-weight:900; font-style:italic;">
+        <span style="color:#ffc24d;">Canapés, matelas, tapis…</span> <span style="color:#fff;">on s'en occupe aussi.</span>
+      </span>
+      <p style="margin:14px auto 0; max-width:560px; color:rgba(255,255,255,.7); font-weight:500;">Le nettoyage ne s'arrête pas à la voiture. On redonne vie à vos textiles d'intérieur.</p>
+    </div>
+  </section>
+
+  <!-- ============ ENCART : Le tarif s'adapte à la saleté ============ -->
+  <section style="position:relative; z-index:1; padding:clamp(24px,5vw,44px) clamp(18px,5vw,40px); display:flex; justify-content:center;">
+    <div style="display:inline-flex; align-items:center; gap:14px; background:linear-gradient(160deg,#ffc24d,#f7941d); color:#08233f; font-weight:900; font-style:italic; font-size:clamp(18px,3.4vw,26px); padding:18px 34px; border-radius:999px; box-shadow:0 16px 38px rgba(247,148,29,.4); text-align:center;">
+      <span style="font-size:1.4em;">💧</span> LE TARIF S'ADAPTE À LA SALETÉ
+    </div>
+  </section>
+
+  <!-- ============ TOUS TYPES DE VÉHICULES ============ -->
+  <section id="vehicules" style="position:relative; z-index:1; padding:clamp(40px,7vh,80px) clamp(18px,5vw,40px);">
+    <div style="max-width:1100px; margin:0 auto;">
+      <div style="text-align:center; margin-bottom:38px;">
+        <span style="display:block; color:#ffc24d; font-weight:700; letter-spacing:4px; font-size:13px;">PRIS EN CHARGE</span>
+        <h2 style="margin:8px 0 0; font-weight:900; font-style:italic; font-size:clamp(28px,5vw,46px);">Tous types de véhicules</h2>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:22px;">
+        <!-- Citadine -->
+        <div style="background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:26px; padding:26px; text-align:center;">
+          <div style="height:90px; border-radius:18px; background:repeating-linear-gradient(45deg,rgba(255,255,255,.05),rgba(255,255,255,.05) 10px,rgba(255,255,255,.09) 10px,rgba(255,255,255,.09) 20px); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.4); font-family:monospace; font-size:12px;">photo citadine</div>
+          <div style="margin-top:18px; font-weight:800; font-size:18px;">Citadines</div>
+          <div style="margin-top:6px; color:rgba(255,255,255,.6); font-size:14px; font-weight:500;">Petites &amp; compactes</div>
+        </div>
+        <!-- SUV -->
+        <div style="background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:26px; padding:26px; text-align:center;">
+          <div style="height:90px; border-radius:18px; background:repeating-linear-gradient(45deg,rgba(255,255,255,.05),rgba(255,255,255,.05) 10px,rgba(255,255,255,.09) 10px,rgba(255,255,255,.09) 20px); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.4); font-family:monospace; font-size:12px;">photo SUV</div>
+          <div style="margin-top:18px; font-weight:800; font-size:18px;">SUV &amp; berlines</div>
+          <div style="margin-top:6px; color:rgba(255,255,255,.6); font-size:14px; font-weight:500;">Familiales &amp; routières</div>
+        </div>
+        <!-- Utilitaire -->
+        <div style="background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:26px; padding:26px; text-align:center;">
+          <div style="height:90px; border-radius:18px; background:repeating-linear-gradient(45deg,rgba(255,255,255,.05),rgba(255,255,255,.05) 10px,rgba(255,255,255,.09) 10px,rgba(255,255,255,.09) 20px); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.4); font-family:monospace; font-size:12px;">photo utilitaire</div>
+          <div style="margin-top:18px; font-weight:800; font-size:18px;">Utilitaires &amp; camions</div>
+          <div style="margin-top:6px; color:rgba(255,255,255,.6); font-size:14px; font-weight:500;">Pros &amp; gros volumes</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RÉSERVATION EN LIGNE ============ -->
+  <section id="reservation" style="position:relative; z-index:1; padding:clamp(40px,7vh,80px) clamp(18px,5vw,40px);">
+    <div style="max-width:760px; margin:0 auto; background:linear-gradient(165deg,#0f3056,#0a2037); border:1px solid rgba(255,255,255,.1); border-radius:34px; padding:clamp(26px,5vw,48px); box-shadow:0 26px 60px rgba(0,0,0,.4);">
+      <div style="text-align:center; margin-bottom:30px;">
+        <span style="display:block; color:#ffc24d; font-weight:700; letter-spacing:4px; font-size:13px;">RÉSERVATION EN LIGNE</span>
+        <h2 style="margin:8px 0 0; font-weight:900; font-style:italic; font-size:clamp(26px,5vw,42px);">Réservez votre créneau</h2>
+      </div>
+
+      <form onSubmit="{{ onBooking }}" novalidate="true" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px;">
+        <!-- Formule -->
+        <label style="display:flex; flex-direction:column; gap:8px; grid-column:1/-1;">
+          <span style="font-size:12px; font-weight:700; letter-spacing:1px; color:#ffc24d; text-transform:uppercase;">Formule</span>
+          <select name="formule" style="appearance:none; padding:14px 16px; border-radius:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:15px; font-weight:600;">
+            <option value="" style="color:#08233f;">Choisir une formule…</option>
+            <option value="Formule 1" style="color:#08233f;">Formule 1 — Aspirateur, Plastiques &amp; Vitres</option>
+            <option value="Formule 2" style="color:#08233f;">Formule 2 — + Shampouineuse</option>
+            <option value="Formule 3" style="color:#08233f;">Formule 3 — + Extérieur complet</option>
+            <option value="Textiles maison" style="color:#08233f;">Canapés / Matelas / Tapis</option>
+          </select>
+        </label>
+        <!-- Type véhicule -->
+        <label style="display:flex; flex-direction:column; gap:8px;">
+          <span style="font-size:12px; font-weight:700; letter-spacing:1px; color:#ffc24d; text-transform:uppercase;">Type de véhicule</span>
+          <select name="vehicule" style="appearance:none; padding:14px 16px; border-radius:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:15px; font-weight:600;">
+            <option value="" style="color:#08233f;">Choisir…</option>
+            <option value="Citadine" style="color:#08233f;">Citadine</option>
+            <option value="SUV / Berline" style="color:#08233f;">SUV / Berline</option>
+            <option value="Utilitaire / Camion" style="color:#08233f;">Utilitaire / Camion</option>
+          </select>
+        </label>
+        <!-- Date -->
+        <label style="display:flex; flex-direction:column; gap:8px;">
+          <span style="font-size:12px; font-weight:700; letter-spacing:1px; color:#ffc24d; text-transform:uppercase;">Date</span>
+          <input type="date" name="date" style="padding:14px 16px; border-radius:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:15px; font-weight:600;">
+        </label>
+        <!-- Heure -->
+        <label style="display:flex; flex-direction:column; gap:8px;">
+          <span style="font-size:12px; font-weight:700; letter-spacing:1px; color:#ffc24d; text-transform:uppercase;">Heure</span>
+          <input type="time" name="heure" style="padding:14px 16px; border-radius:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:15px; font-weight:600;">
+        </label>
+        <!-- Nom -->
+        <label style="display:flex; flex-direction:column; gap:8px;">
+          <span style="font-size:12px; font-weight:700; letter-spacing:1px; color:#ffc24d; text-transform:uppercase;">Nom</span>
+          <input type="text" name="nom" placeholder="Votre nom" style="padding:14px 16px; border-radius:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:15px; font-weight:600;">
+        </label>
+        <!-- Téléphone -->
+        <label style="display:flex; flex-direction:column; gap:8px;">
+          <span style="font-size:12px; font-weight:700; letter-spacing:1px; color:#ffc24d; text-transform:uppercase;">Téléphone</span>
+          <input type="tel" name="tel" placeholder="06 12 34 56 78" style="padding:14px 16px; border-radius:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:15px; font-weight:600;">
+        </label>
+
+        <button type="submit" style="grid-column:1/-1; margin-top:8px; border:none; cursor:pointer; background:linear-gradient(160deg,#ffc24d,#f7941d); color:#08233f; font-weight:900; font-size:17px; padding:17px; border-radius:18px; box-shadow:0 14px 30px rgba(247,148,29,.4);">Confirmer ma réservation</button>
+
+        <!-- Message d'erreur -->
+        <sc-if value="{{ bookingError }}" hint-placeholder-val="{{ false }}">
+          <div style="grid-column:1/-1; background:rgba(231,76,60,.16); border:1px solid rgba(231,76,60,.5); color:#ffd2cc; padding:14px 18px; border-radius:16px; font-weight:600; font-size:14px;">⚠️ {{ bookingError }}</div>
+        </sc-if>
+        <!-- Message de confirmation -->
+        <sc-if value="{{ bookingMsg }}" hint-placeholder-val="{{ false }}">
+          <div style="grid-column:1/-1; background:rgba(46,204,113,.14); border:1px solid rgba(46,204,113,.5); color:#c9f6dd; padding:18px 20px; border-radius:18px; font-weight:600; font-size:15px; line-height:1.5;">✅ {{ bookingMsg }}</div>
+        </sc-if>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" style="position:relative; z-index:1; padding:clamp(40px,7vh,80px) clamp(18px,5vw,40px);">
+    <div style="max-width:1100px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:28px; align-items:start;">
+
+      <!-- Bloc infos -->
+      <div>
+        <span style="display:block; color:#ffc24d; font-weight:700; letter-spacing:4px; font-size:13px;">CONTACT</span>
+        <h2 style="margin:8px 0 0; font-weight:900; font-style:italic; font-size:clamp(28px,5vw,46px);">Parlons-en</h2>
+        <p style="margin:14px 0 26px; color:rgba(255,255,255,.72); font-weight:500; line-height:1.6;">Une question, un devis, un créneau spécifique ? Écrivez-nous ou retrouvez-nous sur Snapchat.</p>
+
+        <!-- Snapchat -->
+        <a href="https://www.snapchat.com/add/autoclean.59" target="_blank" rel="noopener" style="display:flex; align-items:center; gap:16px; text-decoration:none; background:#FFFC00; color:#08233f; padding:16px 20px; border-radius:20px; box-shadow:0 12px 28px rgba(0,0,0,.25);">
+          <span style="width:42px; height:42px; flex:none; background:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px;">👻</span>
+          <span style="display:flex; flex-direction:column; line-height:1.2;">
+            <span style="font-size:11px; font-weight:700; letter-spacing:1px; opacity:.7;">SNAPCHAT</span>
+            <span style="font-weight:900; font-size:19px; letter-spacing:1px;">AUTOCLEAN.59</span>
+          </span>
+        </a>
+
+        <!-- Zone d'intervention -->
+        <div style="margin-top:22px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:22px;">
+          <div style="font-weight:800; font-size:16px; display:flex; align-items:center; gap:8px;">📍 Zone d'intervention — <span style="color:#ffc24d;">Nord&nbsp;(59)</span></div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:14px;">
+            <span style="background:rgba(247,160,30,.14); border:1px solid rgba(247,160,30,.35); color:#ffc24d; padding:7px 14px; border-radius:999px; font-size:13px; font-weight:600;">Lille</span>
+            <span style="background:rgba(247,160,30,.14); border:1px solid rgba(247,160,30,.35); color:#ffc24d; padding:7px 14px; border-radius:999px; font-size:13px; font-weight:600;">Roubaix</span>
+            <span style="background:rgba(247,160,30,.14); border:1px solid rgba(247,160,30,.35); color:#ffc24d; padding:7px 14px; border-radius:999px; font-size:13px; font-weight:600;">Tourcoing</span>
+            <span style="background:rgba(247,160,30,.14); border:1px solid rgba(247,160,30,.35); color:#ffc24d; padding:7px 14px; border-radius:999px; font-size:13px; font-weight:600;">Douai</span>
+            <span style="background:rgba(247,160,30,.14); border:1px solid rgba(247,160,30,.35); color:#ffc24d; padding:7px 14px; border-radius:999px; font-size:13px; font-weight:600;">Valenciennes</span>
+            <span style="background:rgba(247,160,30,.14); border:1px solid rgba(247,160,30,.35); color:#ffc24d; padding:7px 14px; border-radius:999px; font-size:13px; font-weight:600;">&amp; alentours</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulaire contact -->
+      <div style="background:linear-gradient(165deg,#0f3056,#0a2037); border:1px solid rgba(255,255,255,.1); border-radius:30px; padding:clamp(24px,4vw,36px); box-shadow:0 22px 50px rgba(0,0,0,.35);">
+        <form onSubmit="{{ onContact }}" novalidate="true" style="display:flex; flex-direction:column; gap:16px;">
+          <label style="display:flex; flex-direction:column; gap:8px;">
+            <span style="font-size:12px; font-weight:700; letter-spacing:1px; color:#ffc24d; text-transform:uppercase;">Nom</span>
+            <input type="text" name="nom" placeholder="Votre nom" style="padding:14px 16px; border-radius:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:15px; font-weight:600;">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:8px;">
+            <span style="font-size:12px; font-weight:700; letter-spacing:1px; color:#ffc24d; text-transform:uppercase;">Téléphone</span>
+            <input type="tel" name="tel" placeholder="06 12 34 56 78" style="padding:14px 16px; border-radius:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:15px; font-weight:600;">
+          </label>
+          <label style="display:flex; flex-direction:column; gap:8px;">
+            <span style="font-size:12px; font-weight:700; letter-spacing:1px; color:#ffc24d; text-transform:uppercase;">Message</span>
+            <textarea name="message" rows="4" placeholder="Votre demande…" style="padding:14px 16px; border-radius:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:15px; font-weight:600; resize:vertical;"></textarea>
+          </label>
+          <button type="submit" style="border:none; cursor:pointer; background:linear-gradient(160deg,#ffc24d,#f7941d); color:#08233f; font-weight:900; font-size:16px; padding:16px; border-radius:16px; box-shadow:0 12px 26px rgba(247,148,29,.35);">Envoyer le message</button>
+
+          <sc-if value="{{ contactError }}" hint-placeholder-val="{{ false }}">
+            <div style="background:rgba(231,76,60,.16); border:1px solid rgba(231,76,60,.5); color:#ffd2cc; padding:13px 16px; border-radius:14px; font-weight:600; font-size:14px;">⚠️ {{ contactError }}</div>
+          </sc-if>
+          <sc-if value="{{ contactMsg }}" hint-placeholder-val="{{ false }}">
+            <div style="background:rgba(46,204,113,.14); border:1px solid rgba(46,204,113,.5); color:#c9f6dd; padding:15px 18px; border-radius:16px; font-weight:600; font-size:14px; line-height:1.5;">✅ {{ contactMsg }}</div>
+          </sc-if>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PIED DE PAGE ============ -->
+  <footer style="position:relative; z-index:1; margin-top:30px; border-top:1px solid rgba(255,255,255,.1); background:rgba(5,17,33,.6); padding:clamp(34px,6vw,56px) clamp(18px,5vw,40px) 40px;">
+    <div style="max-width:1100px; margin:0 auto; display:flex; flex-direction:column; align-items:center; text-align:center; gap:22px;">
+      <a href="#accueil" style="display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff;">
+        <span style="position:relative; width:30px; height:30px; flex:none; background:linear-gradient(160deg,#ffc24d,#f7941d); border-radius:50% 50% 50% 0; transform:rotate(45deg);">
+          <span style="position:absolute; inset:8px 8px 6px 10px; background:rgba(255,255,255,.85); border-radius:50%;"></span>
+        </span>
+        <span style="font-weight:900; font-size:20px; font-style:italic; letter-spacing:1px;">AUTO<span style="color:#f7a01e;">CLEAN</span></span>
+      </a>
+      <p style="margin:0; color:rgba(255,255,255,.6); font-weight:500; max-width:420px;">Maison &amp; Auto Impeccables — Nettoyage professionnel dans tout le Nord&nbsp;(59).</p>
+
+      <!-- Réseaux sociaux -->
+      <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
+        <a href="https://www.snapchat.com/add/autoclean.59" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:#FFFC00; color:#08233f; font-weight:800; font-size:14px; padding:11px 18px; border-radius:999px;">👻 Snapchat</a>
+        <a href="#" style="display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); color:#fff; font-weight:700; font-size:14px; padding:11px 18px; border-radius:999px;">Instagram</a>
+        <a href="#" style="display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); color:#fff; font-weight:700; font-size:14px; padding:11px 18px; border-radius:999px;">Facebook</a>
+        <a href="#" style="display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); color:#fff; font-weight:700; font-size:14px; padding:11px 18px; border-radius:999px;">TikTok</a>
+      </div>
+
+      <div style="color:rgba(255,255,255,.4); font-size:13px; font-weight:500; margin-top:6px;">© 2026 AUTO CLEAN — Tous droits réservés.</div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  // État : messages des deux formulaires
+  state = {
+    bookingMsg: null, bookingError: null,
+    contactMsg: null, contactError: null,
+  };
+
+  /* Validation simple d'un numéro de téléphone : au moins 9 chiffres */
+  _isPhoneOk(tel) {
+    return tel.replace(/\D/g, '').length >= 9;
+  }
+
+  /* Formate une date AAAA-MM-JJ en JJ/MM/AAAA pour l'affichage */
+  _fmtDate(d) {
+    if (!d) return d;
+    const p = d.split('-');
+    return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d;
+  }
+
+  renderVals() {
+    /* --- Bulles flottantes : générées une seule fois, stables au re-render --- */
+    if (!this._bubbles) {
+      this._bubbles = Array.from({ length: 20 }, () => ({
+        left: Math.random() * 100,
+        size: 8 + Math.random() * 48,
+        dur: 9 + Math.random() * 14,
+        delay: Math.random() * 14,
+        opacity: 0.05 + Math.random() * 0.16,
+      }));
+    }
+    const bubbles = this._bubbles.map((b, i) => React.createElement('span', {
+      key: i,
+      style: {
+        position: 'absolute', bottom: '-60px', left: b.left + '%',
+        width: b.size + 'px', height: b.size + 'px', borderRadius: '50%',
+        background: 'radial-gradient(circle at 32% 28%, rgba(255,255,255,.7), rgba(120,180,255,.16) 60%, rgba(120,180,255,.02))',
+        border: '1px solid rgba(255,255,255,.16)',
+        animation: `rise ${b.dur}s linear ${b.delay}s infinite`,
+        opacity: b.opacity, pointerEvents: 'none',
+      },
+    }));
+
+    /* --- Soumission réservation --- */
+    const onBooking = (e) => {
+      e.preventDefault();
+      const f = e.target;
+      const v = {
+        formule: f.formule.value, vehicule: f.vehicule.value,
+        date: f.date.value, heure: f.heure.value,
+        nom: f.nom.value.trim(), tel: f.tel.value.trim(),
+      };
+      // Tous les champs requis
+      if (!v.formule || !v.vehicule || !v.date || !v.heure || !v.nom || !v.tel) {
+        this.setState({ bookingError: 'Merci de remplir tous les champs du formulaire.', bookingMsg: null });
+        return;
+      }
+      // Téléphone valide
+      if (!this._isPhoneOk(v.tel)) {
+        this.setState({ bookingError: 'Le numéro de téléphone semble incorrect.', bookingMsg: null });
+        return;
+      }
+      // Confirmation
+      this.setState({
+        bookingMsg: `Merci ${v.nom} ! Votre réservation « ${v.formule} » pour un véhicule ${v.vehicule} est enregistrée le ${this._fmtDate(v.date)} à ${v.heure}. Nous vous rappelons au ${v.tel} pour confirmer.`,
+        bookingError: null,
+      });
+      f.reset();
+    };
+
+    /* --- Soumission contact --- */
+    const onContact = (e) => {
+      e.preventDefault();
+      const f = e.target;
+      const nom = f.nom.value.trim();
+      const tel = f.tel.value.trim();
+      const message = f.message.value.trim();
+      if (!nom || !tel || !message) {
+        this.setState({ contactError: 'Merci de remplir tous les champs.', contactMsg: null });
+        return;
+      }
+      if (!this._isPhoneOk(tel)) {
+        this.setState({ contactError: 'Le numéro de téléphone semble incorrect.', contactMsg: null });
+        return;
+      }
+      this.setState({
+        contactMsg: `Merci ${nom}, votre message a bien été envoyé. Nous vous recontactons rapidement au ${tel}.`,
+        contactError: null,
+      });
+      f.reset();
+    };
+
+    return {
+      bubbles,
+      onBooking, onContact,
+      bookingMsg: this.state.bookingMsg, bookingError: this.state.bookingError,
+      contactMsg: this.state.contactMsg, contactError: this.state.contactError,
+    };
+  }
+}
+</script>
+</body>
+</html>
