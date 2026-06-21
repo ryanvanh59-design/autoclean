@@ -508,7 +508,11 @@
 
     <!-- Formulaire contact -->
     <div style="background:linear-gradient(165deg,#0f3056,#0a2037); border:1px solid rgba(255,255,255,.1); border-radius:30px; padding:clamp(24px,4vw,36px); box-shadow:0 22px 50px rgba(0,0,0,.35);">
-      <form id="contact-form" novalidate style="display:flex; flex-direction:column; gap:16px;">
+      <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" novalidate style="display:flex; flex-direction:column; gap:16px;">
+        <input type="hidden" name="access_key" value="VOTRE_CLE_WEB3FORMS">
+        <input type="hidden" name="subject" value="Nouveau message AUTO CLEAN">
+        <input type="hidden" name="from_name" value="Site AUTO CLEAN">
+        <input type="checkbox" name="botcheck" style="display:none;">
         <label style="display:flex; flex-direction:column; gap:8px;">
           <span style="font-size:12px; font-weight:700; letter-spacing:1px; color:#ffc24d; text-transform:uppercase;">Nom</span>
           <input type="text" name="nom" placeholder="Votre nom" style="padding:14px 16px; border-radius:16px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.18); color:#fff; font-size:15px; font-weight:600;">
@@ -756,8 +760,21 @@
     }
 
     showAlert(contactError, null);
-    showAlert(contactMsg, 'Merci ' + nom + ', votre message a bien été envoyé. Nous vous recontactons rapidement au ' + tel + '.');
-    f.reset();
+    var btn = f.querySelector('button[type="submit"]');
+    btn.disabled = true; btn.textContent = 'Envoi…'; btn.style.opacity = '.6';
+
+    fetch('https://api.web3forms.com/submit', { method: 'POST', body: new FormData(f) })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.success) {
+          showAlert(contactMsg, 'Merci ' + nom + ' ! Votre message a été envoyé. Nous vous recontactons rapidement au ' + tel + '.');
+          f.reset();
+        } else {
+          showAlert(contactError, 'Erreur lors de l\'envoi. Contactez-nous directement sur Snapchat.');
+        }
+      })
+      .catch(function() { showAlert(contactError, 'Erreur réseau. Réessayez ou contactez-nous sur Snapchat.'); })
+      .finally(function() { btn.disabled = false; btn.textContent = 'Envoyer le message'; btn.style.opacity = '1'; });
   });
 })();
 </script>
